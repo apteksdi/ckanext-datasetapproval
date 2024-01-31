@@ -14,7 +14,7 @@
 {% block save_button %}
   {% if form_style == 'new' %}
       <a class="btn btn-primary" data-module="form-save" data-module-type="draft">{{ _('Next: Add Data')}}</a>
-      <button class="btn btn-primary hidden" type="submit" name="save"></button>
+      <button class="btn btn-primary visually-hidden" type="submit" name="save"></button>
     {% else %}
       <a class="btn btn-warning" data-module="form-save" data-module-type="draft">{{ _('Save as Draft')}}</a>
       <a class="btn btn-primary" data-module="form-save" data-module-type="published">
@@ -22,6 +22,6 @@
         {{ _('Next: Add Data') }}
         {% endblock %}
       </a>
-      <button class="btn btn-primary hidden" type="submit" name="save"></button>
+      <button class="btn btn-primary visually-hidden" type="submit" name="save"></button>
   {% endif %}
 {% endblock %}

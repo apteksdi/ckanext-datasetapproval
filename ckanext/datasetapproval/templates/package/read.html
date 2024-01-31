@@ -40,11 +40,11 @@
         </span>
       {% endif %}
       {% if pkg.get('state', '').startswith('draft') %}
-      <span class="label label-info">{{ _('Draft') }}</span>
+      <span class="badge rounded-pill bg-secondary">{{ _('Draft') }}</span>
     {% elif pkg.get('publishing_status', '').startswith('draft') %}
-      <span class="label label-info">{{ _('Draft') }}</span>
+      <span class="badge rounded-pill bg-secondary">{{ _('Draft') }}</span>
     {% elif pkg.get('state', '').startswith('deleted') %}
-      <span class="label label-danger">{{ _('Deleted') }}</span>
+      <span class="badge rounded-pill bg-danger">{{ _('Deleted') }}</span>
     {% endif %}
     </div>
       <h1>
