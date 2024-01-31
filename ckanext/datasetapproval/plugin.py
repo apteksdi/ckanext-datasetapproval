@@ -155,7 +155,7 @@ class DatasetapprovalPlugin(plugins.SingletonPlugin,
         labels = super(DatasetapprovalPlugin, self
                        ).get_user_dataset_labels(user_obj)
 
-        if user_obj and user_obj.plugin_extras:
+        if user_obj and hasattr(user_obj, 'plugin_extras') and user_obj.plugin_extras:
             if user_obj.plugin_extras.get('has_approval_permission', False):
                 labels = [x for x in labels if not x.startswith('member')]
                 orgs = toolkit.get_action(u'organization_list_for_user')(
