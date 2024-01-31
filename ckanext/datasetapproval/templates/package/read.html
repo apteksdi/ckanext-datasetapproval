@@ -53,7 +53,7 @@
     <h1>
       {% block page_heading %}
         {{ h.dataset_display_name(pkg) }}
-        {% if hasattr(pkg, 'state') %}
+        {% if pkg is defined and pkg.state is defined %}
           {% if pkg.state.startswith('draft') %}
             [{{ _('Draft') }}]
           {% endif %}
