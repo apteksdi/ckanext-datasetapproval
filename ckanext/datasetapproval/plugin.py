@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import DefaultPermissionLabels
@@ -43,8 +44,66 @@ class DatasetapprovalPlugin(plugins.SingletonPlugin,
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IDatasetForm)
     plugins.implements(plugins.IPermissionLabels, inherit=True)
+    plugins.implements(plugins.IFacets, inherit=True)
 
+    # IFacets
+    def dataset_facets(self, facets_dict, package_type):
 
+        if package_type != 'dataset':
+            return facets_dict
+
+        return OrderedDict([('kategori', 'Kategori'),
+                            ('prioritas_tahun', 'Data Prioritas'),
+                            #('groups', 'Grup'),
+                            ('organization', 'Walidata'),
+                            #('vocab_category_all', 'Topic Categories'),
+                            #('metadata_type', 'Dataset Type'),
+                            #('tags', 'Tagging'),
+                            ('res_format', 'Format'),
+                            #('organization_type', 'Organization Types'),
+                            #('publisher', 'Publishers'),
+                            #('extras_progress', 'Progress'),
+                            ])
+
+    def organization_facets(self, facets_dict, organization_type, package_type):
+
+        if not package_type:
+            return OrderedDict([('organization', 'Walidata'),
+                                ('kategori', 'Kategori'),
+                                ('prioritas_tahun', 'Data Prioritas'),
+                                #('groups', 'Grup'),
+                                #('organization', 'Instansi'),
+                                #('vocab_category_all', 'Topic Categories'),
+                                #('metadata_type', 'Dataset Type'),
+                                #('tags', 'Tagging'),
+                                ('res_format', 'Format'),
+                                #('harvest_source_title', 'Harvest Source'),
+                                #('capacity', 'Visibility'),
+                                #('dataset_type', 'Resource Type'),
+                                #('publisher', 'Publishers'),
+                                ])
+        else:
+            return facets_dict
+
+    def group_facets(self, facets_dict, group_type, package_type):
+
+        # get the categories key
+        group_id = plugins.toolkit.c.group_dict['id']
+        key = 'vocab___category_tag_%s' % group_id
+        if not package_type:
+            return OrderedDict([('kategori', 'Kategori'),
+                                ('prioritas_tahun', 'Data Prioritas'),
+                                #('groups', 'Grup'),
+                                ('organization', 'Walidata'),
+                                #('metadata_type', 'Dataset Type'),
+                                #('organization_type', 'Organization Types'),
+                                #('tags', 'Tagging'),
+                                ('res_format', 'Format'),
+                                #(key, 'Categories'),
+                                #('publisher', 'Publisher'),
+                                ])
+        else:
+            return facets_dict
 
     # IConfigurer
     def update_config(self, config_):
@@ -146,7 +205,7 @@ class DatasetapprovalPlugin(plugins.SingletonPlugin,
             return search_params
         else:   
             search_params.update({
-                'fq': '!(publishing_status:(draft OR in_review OR rejected))' + search_params.get('fq', '')
+                'fq': '!(publishing_status:(draft))' + search_params.get('fq', '')
             })
         return search_params
 
@@ -169,3 +228,31 @@ class DatasetapprovalPlugin(plugins.SingletonPlugin,
         return blueprints.approveBlueprint
 
 
+#package_extra
+def get_pkg_dict_extra(pkg_dict, key, default=None):
+    '''Override the CKAN core helper to add rolled up extras
+    Returns the value for the dataset extra with the provided key.
+
+    If the key is not found, it returns a default value, which is None by
+    default.
+
+    :param pkg_dict: dictized dataset
+    :key: extra key to lookup
+    :default: default value returned if not found
+    '''
+    extras = pkg_dict['extras'] if 'extras' in pkg_dict else []
+
+    for extra in extras:
+        if extra['key'] == key:
+            return extra['value']
+
+    # also include the rolled up extras
+    for extra in extras:
+        if 'extras_rollup' == extra.get('key'):
+            rolledup_extras = json.loads(extra.get('value'))
+            for k, value in rolledup_extras.items():
+                if k == key:
+                    return value
+
+
+    

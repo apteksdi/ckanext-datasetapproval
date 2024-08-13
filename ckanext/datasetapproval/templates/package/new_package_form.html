@@ -26,18 +26,6 @@
   {% if form_style != 'edit' %}
     {{ super() }}
   {% else %}
-    {{ _('Finish Update') }}
-  {% endif %}
-{% endblock %}
-
-{% block cancel_button %}
-  {% if form_style != 'edit' %}
-    {{ super() }}
-  {% endif %}
-{% endblock %}
-
-{% block delete_button %}
-  {% if form_style == 'edit' %}
-    {{ super() }}
+    {{ _('Review Done') }}
   {% endif %}
 {% endblock %}

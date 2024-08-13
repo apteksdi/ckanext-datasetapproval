@@ -10,15 +10,15 @@
     'remove_field': remove_field }
   %}
   {% set sorting = [
-    (_('Relevance'), 'score desc, metadata_modified desc'),
+    (_('Data Prioritas'), 'prioritas_tahun desc'),
+    (_('Kementerian/Lembaga'), 'publisher_type desc'),
+    (_('Daerah'), 'publisher_type asc'),
     (_('Name Ascending'), 'title_string asc'),
     (_('Name Descending'), 'title_string desc'),
     (_('Last Modified'), 'metadata_modified desc'),
-    (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ,
-    (_('Draft'), 'sum(termfreq(publishing_status, \'draft\')) desc') if g.userobj.sysadmin else (false, false),
-    (_('Rejected'), 'sum(termfreq(publishing_status, \'rejected\')) desc') if g.userobj.sysadmin else (false, false),
-    (_('Review Pending'), 'sum(termfreq(publishing_status, \'in_review\')) desc') if g.userobj.sysadmin else (false, false),
-
+    (_('Rejected'), 'sum(termfreq(review_status, \'rejected\')) desc'),
+    (_('To Be Confirm'), 'sum(termfreq(review_status, \'tbc\')) desc'),
+    (_('Review Pending'), 'sum(termfreq(publishing_status, \'in_review\')) desc')
     ]
   %}
     {% snippet 'snippets/search_form.html', form_id='dataset-search-form', type=dataset_type, query=q, sorting=sorting, sorting_selected=sort_by_selected, count=page.item_count, placeholder=_('Search ' + dataset_type + 's') + '...', facets=facets, show_empty=request.params, error=query_error, fields=fields %}

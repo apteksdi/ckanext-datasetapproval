@@ -34,8 +34,8 @@ def search_url(params, package_type=None):
 def approve(id):
     return _make_action(id, 'approve')
 
-def reject(id):
-    return _make_action(id, 'reject')
+#def reject(id):
+#    return _make_action(id, 'reject')
 
 def dataset_review(id):
     if toolkit.c.user != id:
@@ -110,16 +110,15 @@ def _raise_not_authz_or_not_pending(id):
     else :
         raise toolkit.abort(404, 'Dataset "{}" not found'.format(id))
 
-def _make_action(package_id, action='reject'):
+def _make_action(package_id, action='approve'):
     states = {
-        'reject': 'rejected',
         'approve': 'approved'
     }
     # check access and state
     _raise_not_authz_or_not_pending(package_id)
     toolkit.get_action('package_patch')(
         {'model': model, 'user': toolkit.c.user},
-        {'id': package_id, 'publishing_status': states[action], 'private': False}
+        {'id': package_id, 'publishing_status': states[action], 'private': False, 'type': 'dataset'}
     )
     # Notify editors via email that dataset has been approved/rejected.
     try:
@@ -131,6 +130,5 @@ def _make_action(package_id, action='reject'):
     return toolkit.redirect_to(controller='dataset', action='read', id=package_id)
 
 approveBlueprint.add_url_rule('/dataset-publish/<id>/approve', view_func=approve)
-approveBlueprint.add_url_rule('/dataset-publish/<id>/reject', view_func=reject)
+#approveBlueprint.add_url_rule('/dataset-publish/<id>/reject', view_func=reject)
 approveBlueprint.add_url_rule(u'/user/<id>/dataset_review', view_func=dataset_review)
-

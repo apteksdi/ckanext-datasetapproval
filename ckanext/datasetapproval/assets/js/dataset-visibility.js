@@ -5,16 +5,16 @@
 delete this.ckan.module.registry['dataset-visibility']
 this.ckan.module('dataset-visibility', function ($) {
     return {
-      currentValue: false,
+      currentValue: true,
       options: {
         organizations: $('#field-organizations'),
-        visibility: $('#field-private'),
+        visibility: $('#field-public'),
         currentValue: null,
         authorizedOrg: []
       },
   
       initialize: function() {
-        $.proxyAll(this, /_on/);
+        $.proxyAll(this, /_off/);
         this.options.currentValue = this.options.visibility.val();
         this.options.organizations.on('change', this._onOrganizationChange);
         this._onOrganizationChange();
@@ -27,11 +27,11 @@ this.ckan.module('dataset-visibility', function ($) {
               var value = self.options.organizations.val();
               if (value && capacity === 'admin' ) {
                 self.options.visibility
-                  .prop('disabled', false)
+                  .prop('enabled', true)
                   .val(self.options.currentValue);
               } else {
                 self.options.visibility
-                  .prop('disabled', true)
+                  .prop('enabled', true)
                   .val('True');
               }
           },
