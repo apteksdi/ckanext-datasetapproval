@@ -46,7 +46,7 @@
 {% if stage %}
    {% block save_button %}
 {% if stage != 1 %}
-  {% if 'complete' in stage %}
+  {% if 'draft' in stage %}
     <button class="btn btn-warning" name="save" type="submit"  data-module="form-save" data-module="form-save" data-module-type="resource-draft">{{ _('Finish & save as draft') }}</button>
   {% endif %}
 {% endif %}

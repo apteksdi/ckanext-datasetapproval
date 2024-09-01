@@ -6,12 +6,12 @@
   {% if not h.is_admin(c.user) %}
 
     <div class="alert alert-warning" role="alert">
-        <p><strong>{{ _('Note:') }}</strong></p>
+        <p><strong>{{ _('Catatan:') }}</strong></p>
         {% if form_style != 'edit' %}
           <p>This dataset will be submited for approval by an Office Administrator.</p>
           <p>While being reviewed members of other offices or the general public won't be able to access it.</p>
         {% else %}
-          <p>Changes made now won't be public until the dataset is approved.</p>
+          <p>Daftar data yang telah dibuat perlu mendapatkan persetujuan walidata</p>
         {% endif %}
     </div>
 
